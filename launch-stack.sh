@@ -34,8 +34,6 @@ aws cloudformation delete-stack --stack-name $CFNSTACK
 
 aws cloudformation wait stack-delete-complete --stack-name $CFNSTACK
 
-
 cd testing-lambda
-
 
 aws cloudformation create-stack --stack-name $CFNSTACK --capabilities CAPABILITY_NAMED_IAM --disable-rollback --template-body file://$PIPELINEYAML
