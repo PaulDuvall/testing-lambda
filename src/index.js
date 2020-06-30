@@ -17,7 +17,7 @@ exports.handler = function(event, context, callback){
             console.log(err, err.stack);
             callback(null, {
                 statusCode: 500,
-                body: "Failed!"
+                body: "What is going on here? Failed!"
             });
         }
         else{
