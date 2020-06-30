@@ -1,16 +1,23 @@
+// @ts-check
 'use strict';
 
-const AWS = require('aws-sdk');
-const codedeploy = new AWS.CodeDeploy({ apiVersion: '2014-10-06' });
-var lambda = new AWS.Lambda();
+const aws = require('aws-sdk');
+const codedeploy = new aws.CodeDeploy({apiVersion: '2014-10-06'});
+var lambda = new aws.Lambda();
 
-exports.handler = (event, context, callback) => {
+
+exports.handler = async (event, context, callback) => {
 
     console.log("Entering PreTraffic Hook!");
+    console.log(JSON.stringify(event));
 
-    // Read the DeploymentId & LifecycleEventHookExecutionId from the event payload
-    var deploymentId = event.DeploymentId;
-    var lifecycleEventHookExecutionId = event.LifecycleEventHookExecutionId;
+    //Read the DeploymentId from the event payload.
+    let deploymentId = event.DeploymentId;
+    console.log("deploymentId=" + deploymentId);
+
+    //Read the LifecycleEventHookExecutionId from the event payload
+    let lifecycleEventHookExecutionId = event.LifecycleEventHookExecutionId;
+    console.log("lifecycleEventHookExecutionId=" + lifecycleEventHookExecutionId);
 
     var functionToTest = process.env.CurrentVersion;
     console.log("Testing new function version: " + functionToTest);
@@ -54,20 +61,16 @@ exports.handler = (event, context, callback) => {
             };
             
             console.log("lambdaResult=" + lambdaResult);
-
-            // Pass AWS CodeDeploy the prepared validation test results.
-            codedeploy.putLifecycleEventHookExecutionStatus(params, function (err, data) {
-                if (err) {
-                    // Validation failed.
-                    console.log('CodeDeploy Status update failed');
-                    console.log(err, err.stack);
-                    callback("CodeDeploy Status update failed");
-                } else {
-                    // Validation succeeded.
-                    console.log('Codedeploy status updated successfully');
-                    callback(null, 'Codedeploy status updated successfully');
-                }
-            });
+            try {
+              codedeploy.putLifecycleEventHookExecutionStatus(params).promise();
+              console.log("putLifecycleEventHookExecutionStatus done. executionStatus=[" + params.status + "]");
+              return 'Validation test succeeded'
+            }
+            catch (err) {
+              console.log("putLifecycleEventHookExecutionStatus ERROR: " + err);
+              throw new Error('Validation test failed')
+            }
         }
+        
     });
 }
