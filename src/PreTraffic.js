@@ -3,7 +3,6 @@ const codedeploy = new aws.CodeDeploy();
 const lambda = new aws.Lambda();
 
 exports.lambdaHandler = (event, context, callback) => {
-  return x + 10
 
   let status = 'Failed';
 
