@@ -98,14 +98,11 @@ Resources:
                 'Fn::Sub': >-
                   arn:${AWS::Partition}:codedeploy:${AWS::Region}:${AWS::AccountId}:deploymentgroup:${ServerlessDeploymentApplication}/*
         - Version: '2012-10-17'
-          Statement:
-            - Effect: Allow
-              Action:
-                - 'lambda:InvokeFunction'
-              Resource:
-                'Fn::GetAtt':
-                  - GetDataFunction
-                  - Arn
+          Statement: 
+          - Effect: "Allow"
+            Action: 
+              - "lambda:InvokeFunction"
+            Resource: !Ref GetDataFunction.Version
       Runtime: nodejs12.x
       DeploymentPreference:
         Enabled: false
