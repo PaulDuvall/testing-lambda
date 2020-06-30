@@ -1,12 +1,18 @@
-'use strict';
+console.log('Gets data from DynamoDB table')
 
-var AWS = require('aws-sdk');
-var s3 = new AWS.S3();
+const AWS = require('aws-sdk');
+const docClient = new AWS.DynamoDB.DocumentClient({region: process.env.REGION});
 
-exports.handler = (event, context, callback) => {
-    console.log("I am here! " + context.functionName + ":" + context.functionVersion);
+exports.handler = function(event, context, callback){
+    console.log('processing event: %j', event);
 
-    s3.listBuckets(function (err, data) {
+    let scanningParameters = {
+        TableName: process.env.TABLE_NAME,
+        Limit: 100 //maximum result of 100 items
+    };
+
+    //In dynamoDB scan looks through your entire table and fetches all data
+    docClient.scan(scanningParameters, function(err,data){
         if (err) {
             console.log(err, err.stack);
             callback(null, {
@@ -14,25 +20,12 @@ exports.handler = (event, context, callback) => {
                 body: "Failed!"
             });
         }
-        else {
-            var allBuckets = data.Buckets;
-
-            console.log("Total buckets: " + allBuckets.length);
-            //callback(null, allBuckets.length);
-
-            //  New Code begins here
+        else{
             var counter = 0;
-            for (var i in allBuckets) {
-                if (allBuckets[i].Name[0] === "b")
-                    counter++;
-            }
-            console.log("Total buckets starting with b: " + counter);
-
             callback(null, {
                 statusCode: 200,
                 body: counter
             });
-
         }
     });
 }
