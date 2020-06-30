@@ -366,7 +366,7 @@ Resources:
           RunOrder: 2
       ArtifactStore:
         Type: S3
-        Location: !Ref PipelineBucket
+        Location: !Ref ArtifactBucket
 Outputs:
   PipelineUrl:
     Value: !Sub https://console.aws.amazon.com/codepipeline/home?region=${AWS::Region}#/view/${Pipeline}
