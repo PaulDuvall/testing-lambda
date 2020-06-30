@@ -3,6 +3,7 @@ const codedeploy = new aws.CodeDeploy();
 const lambda = new aws.Lambda();
 
 exports.lambdaHandler = (event, context, callback) => {
+  return x + 10
 
   let status = 'Failed';
 
@@ -43,7 +44,7 @@ exports.lambdaHandler = (event, context, callback) => {
             //		"statusCode": 200,
             //		"body": 51
             // }
-            if (result.body == 'Succeeded') {
+            if (result.statusCode == 200) {
                 lambdaResult = "Succeeded";
                 console.log("Validation testing succeeded!");
             }
