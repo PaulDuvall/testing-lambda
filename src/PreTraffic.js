@@ -18,7 +18,7 @@ const aws = require('aws-sdk');
 const codedeploy = new aws.CodeDeploy();
 const lambda = new aws.Lambda();
 
-exports.lambdaHandler = async (event) => {
+exports.Handler = async (event) => {
   let status = 'Failed';
 
   console.log("Entering PreTraffic Hook!");
