@@ -39,6 +39,9 @@ Resources:
             Action: 
               - "s3:ListAllMyBuckets"
             Resource: '*'
+        - DynamoDBReadPolicy:
+            TableName:
+              Ref: MyDynamoDBTable
       Environment:
         Variables:
           TABLE_NAME:
