@@ -52,6 +52,8 @@ exports.handler = (event, context, callback) => {
                 lifecycleEventHookExecutionId: lifecycleEventHookExecutionId,
                 status: lambdaResult // status can be 'Succeeded' or 'Failed'
             };
+            
+            console.log("lambdaResult=" + lambdaResult);
 
             // Pass AWS CodeDeploy the prepared validation test results.
             codedeploy.putLifecycleEventHookExecutionStatus(params, function (err, data) {
