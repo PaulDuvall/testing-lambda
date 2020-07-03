@@ -1,9 +1,9 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: 'AWS::Serverless-2016-10-31'
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
 Description: >
-  sam-stocks
+  sam-states-python
 
-  Sample SAM Template for sam-stocks
+  Sample SAM Template for sam-states-python
 
 Resources:
   StockTradingStateMachine:
@@ -36,23 +36,23 @@ Resources:
   StockCheckerFunction:
     Type: AWS::Serverless::Function # More info about Function Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-function.html
     Properties:
-      CodeUri: functions/stock-checker/
-      Handler: app.lambdaHandler
-      Runtime: nodejs12.x
+      CodeUri: functions/stock_checker/
+      Handler: app.lambda_handler
+      Runtime: python3.8
 
   StockSellerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: functions/stock-seller/
-      Handler: app.lambdaHandler
-      Runtime: nodejs12.x
+      CodeUri: functions/stock_seller/
+      Handler: app.lambda_handler
+      Runtime: python3.8
 
   StockBuyerFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: functions/stock-buyer/
-      Handler: app.lambdaHandler
-      Runtime: nodejs12.x
+      CodeUri: functions/stock_buyer/
+      Handler: app.lambda_handler
+      Runtime: python3.8
 
   TransactionTable:
     Type: AWS::Serverless::SimpleTable # More info about SimpleTable Resource: https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-resource-simpletable.html
@@ -69,8 +69,8 @@ Outputs:
   # Find out more about other implicit resources you can reference within SAM
   # https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/sam-specification-generated-resources.html
   StockTradingStateMachineArn:
-    Description: "Stock Trading state machine ARN"
+    Description: "Stock Trading State machine ARN"
     Value: !Ref StockTradingStateMachine
-  StockTradingStateMachineRole:
-    Description: "IAM Role created for Stock Trading state machine based on the specified SAM Policy Templates"
+  StockTradingStateMachineRoleArn:
+    Description: "IAM Role created for Stock Trading State machine based on the specified SAM Policy Templates"
     Value: !GetAtt StockTradingStateMachineRole.Arn
