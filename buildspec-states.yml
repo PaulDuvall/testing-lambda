@@ -9,8 +9,14 @@ phases:
     commands:
       - pip install --user aws-sam-cli
       - >-
-        aws cloudformation package --template states/template.yaml --s3-bucket $S3_BUCKET
-        --output-template template-export-states.json
+        sam build -template-file sam/template.yaml --build-dir
+        states/.aws_sam/build
+      - >-
+        sam package --template-file "sam/.aws_sam/build/template.yaml"
+        --output-template-file "sam/.aws_sam/package/template.yaml"
+      - >-
+        aws cloudformation package --template sam/.aws_sam/package/template.yaml --s3-bucket
+        $S3_BUCKET --output-template template-export-states.json
 artifacts:
   type: zip
   files:
