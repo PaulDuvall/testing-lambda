@@ -9,7 +9,7 @@ phases:
     commands:
       - pip install --user aws-sam-cli
       - >-
-        sam build -template-file sam/template.yaml --build-dir
+        sam build --template-file sam/template.yaml --build-dir
         states/.aws_sam/build
       - >-
         sam package --template-file "sam/.aws_sam/build/template.yaml"
