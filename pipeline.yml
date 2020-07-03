@@ -284,6 +284,33 @@ Resources:
       Tags:
       - Key: Owner
         Value: MyCodeBuildProject
+  CodeBuildStateMachine:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub ${AWS::StackName}-states
+      Description: State Machine - Stock Trader
+      ServiceRole:
+        Fn::GetAtt:
+        - CodeBuildRole
+        - Arn
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        EnvironmentVariables:
+        - Name: S3_BUCKET
+          Value:
+            Ref: ArtifactBucket
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: "aws/codebuild/amazonlinux2-x86_64-standard:1.0"
+      Source:
+        BuildSpec: buildspec-states.yml
+        Location: !Sub https://github.com/${GitHubUser}/${GitHubRepo}/
+        Type: GITHUB
+      TimeoutInMinutes: 10
+      Tags:
+      - Key: Owner
+        Value: MyCodeBuildProject
   SiteBucket:
     Type: AWS::S3::Bucket
     DeletionPolicy: Delete
@@ -327,7 +354,7 @@ Resources:
           - Name: Lambda-Get-Artifact
           Configuration:
             ProjectName:
-              Ref: CodeBuildGetFunction
+              Ref: CodeBuildStateMachine
           RunOrder: 1
       - Name: Deploy
         Actions:
@@ -349,7 +376,7 @@ Resources:
               - Arn
             Capabilities: CAPABILITY_IAM
             StackName: !Sub ${AWS::StackName}-${AWS::Region}
-            TemplatePath: Lambda-Get-Artifact::template-export-get.json
+            TemplatePath: Lambda-Get-Artifact::template-export-states.json
           RunOrder: 1
         - ActionTypeId:
             Category: Deploy
