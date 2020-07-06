@@ -2,12 +2,11 @@ const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient({region: process.env.REGION});
 const htmlResponse = require('./html-response');
 
-    console.log('1552 Running app.js');
+    console.log('1604 Running app.js');
 
 
     let scanningParameters = {
         TableName: process.env.TABLE_NAME,
-        // TableName: "makeitfail14",
         Limit: 100 //maximum result of 100 items
     };
 

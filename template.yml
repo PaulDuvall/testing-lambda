@@ -17,20 +17,6 @@ Resources:
       CodeUri: src/
       Runtime: nodejs12.x
       AutoPublishAlias: live
-      DeploymentPreference:
-        Type: AllAtOnce #CodeDeployDefault.LambdaCanary10Percent5Minutes
-        Hooks:
-          PreTraffic:
-            Ref: PreTraffic
-          # PostTraffic:
-          #   Ref: PostTraffic
-        TriggerConfigurations:
-          - TriggerEvents:
-              - DeploymentSuccess
-              - DeploymentFailure
-            TriggerName: TestTrigger
-            TriggerTargetArn:
-              Ref: mySNSTopic
       MemorySize: 128
       Policies:
         - Version: "2012-10-17"
