@@ -17,7 +17,10 @@ Resources:
       AutoPublishAlias: live
       Environment:
         Variables:
-          TABLE_NAME: 'cloudproviders-pmd-us-east-1'
+          TABLE_NAME:
+            Ref: MyDynamoDBTable
+          REGION:
+            Ref: AWS::Region
       Events:
         HelloWorld:
           Type: Api
@@ -29,6 +32,25 @@ Resources:
           Properties:
             Path: /hello
             Method: post
+  MyDynamoDBTable:
+    Type: 'AWS::DynamoDB::Table'
+    DeletionPolicy: Delete
+    Properties:
+      TableName:
+        Ref: 'AWS::StackName'
+      AttributeDefinitions:
+        - AttributeName: ServiceName
+          AttributeType: S
+        - AttributeName: id
+          AttributeType: 'N'
+      KeySchema:
+        - AttributeName: ServiceName
+          KeyType: HASH
+        - AttributeName: id
+          KeyType: RANGE
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
 
 Outputs:
   HelloWorldApi:
