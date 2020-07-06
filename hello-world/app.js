@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 const docClient = new AWS.DynamoDB.DocumentClient({region: process.env.REGION});
 const htmlResponse = require('./html-response');
 
-    console.log('1604 Running app.js');
+    console.log('1625 Running app.js');
 
 
     let scanningParameters = {
@@ -11,14 +11,36 @@ const htmlResponse = require('./html-response');
     };
 
 
-    //In dynamoDB scan looks through your entire table and fetches all data
-    docClient.scan(scanningParameters, function(err,data){
-        if (err) {
-            console.log(err, err.stack);
-        }
-        else{
-        }
-    });
+
+docClient.scan(scanningParameters, onScan);
+var count = 0;
+
+function onScan(err, data) {
+    if (err) {
+        console.error("Unable to scan the table. Error JSON:", JSON.stringify(err, null, 2));
+    } else {        
+        console.log("Scan succeeded.");
+        data.Items.forEach(function(itemdata) {
+           console.log("Item :", ++count,JSON.stringify(itemdata));
+        });
+    }
+}
+    
+const ddb = `
+  <html>
+  <head>
+    <meta charset="utf-8"/>
+  </head>
+  <body>
+    <form method="POST">
+      Please enter your name:
+      <input type="text" name="name"/>
+      <br/>
+      <input type="submit" />
+    </form>
+  </body>
+  </html>
+`;
 
 const formHtml = `
   <html>
