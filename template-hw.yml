@@ -15,6 +15,9 @@ Resources:
       Handler: app.lambdaHandler
       Runtime: nodejs12.x
       AutoPublishAlias: live
+      Environment:
+        Variables:
+          TABLE_NAME: 'cloudproviders-pmd-us-east-1'
       Events:
         HelloWorld:
           Type: Api
